@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 
 export default function NewDocumentPage() {
@@ -16,8 +16,9 @@ export default function NewDocumentPage() {
     const [startDate, setStartDate] = useState('')
     const [projectOverview, setProjectOverview] = useState('')
     const [totalPrice, setTotalPrice] = useState('')
+    const [packages, setPackages] = useState([])
+    const [packageId, setPackageId] = useState('')
     const [isSubmitted, setIsSubmitted] = useState(false)
-
 
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -31,11 +32,24 @@ export default function NewDocumentPage() {
             effective_date: effectiveDate,
             start_date: startDate,
             project_overview: projectOverview,
-            total_price: totalPrice
+            total_price: totalPrice,
+            package_id: packageId
         })
         console.log(error)
 
     }
+
+    useEffect(() => {
+        const getPackages = async () => {
+            const { data: packages, error } = await supabase.from('packages').select('*')
+            if (error) {
+                console.log(error)
+            } else {
+                setPackages(packages)
+            }
+        }
+        getPackages()
+    }, [])
 
     const clientName = `${firstName} ${lastName}`
     const clientAddress = `${streetAddress}, ${city}, ${state}, ${zipCode}`
@@ -156,6 +170,22 @@ export default function NewDocumentPage() {
                         value={totalPrice}      
                         onChange={(e) => setTotalPrice(e.target.value)}             
                     />
+
+                {/* packages */}
+                <div>
+                    <select
+                        value={packageId}
+                        onChange={(e) => setPackageId(e.target.value)}
+                    >
+                        <option value="">Choose a package:</option>
+                        {packages.map((p) => (
+                            <option key={p.id} value={p.id}>
+                                {p.name} - ${p.price}
+                            </option>
+                        ))}
+                    </select>   
+
+                </div>
 
                 {/* submit button */}
                 <div className="flex items-center justify-center mt-15">
