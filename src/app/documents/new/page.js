@@ -18,6 +18,7 @@ export default function NewDocumentPage() {
     const [totalPrice, setTotalPrice] = useState('')
     const [packages, setPackages] = useState([])
     const [packageId, setPackageId] = useState('')
+    const [paymentStructure, setPaymentStructure] = useState('')
     const [isSubmitted, setIsSubmitted] = useState(false)
 
 
@@ -33,8 +34,24 @@ export default function NewDocumentPage() {
             start_date: startDate,
             project_overview: projectOverview,
             total_price: totalPrice,
-            package_id: packageId
+            package_id: packageId,
+            payment_structure: paymentStructure
         })
+        setFirstName("")
+        setLastName("")
+        setEmail("")
+        setStreetAddress("")
+        setCity("")
+        setState("")
+        setZipCode("")
+        setEffectiveDate("")
+        setStartDate("")
+        setProjectOverview("")
+        setTotalPrice("")
+        setPackageId("")
+        setPaymentStructure("")
+
+
         console.log(error)
 
     }
@@ -180,10 +197,24 @@ export default function NewDocumentPage() {
                         <option value="">Choose a package:</option>
                         {packages.map((p) => (
                             <option key={p.id} value={p.id}>
-                                {p.name} - ${p.price}
+                                {p.name} - {p.price} 
                             </option>
+                            
                         ))}
-                    </select>   
+                    </select>
+                </div>
+                        
+                {/* payment structure */}
+                <div className="pt-4">
+                    <select
+                        value={paymentStructure}
+                        onChange={(e) => setPaymentStructure(e.target.value)}
+                    >
+                        <option value="">Choose your payment structure:</option>
+                        <option value={"full"}>Paid In Full</option>
+                        <option value={"split_50_50"}>50/50</option>
+                        <option value={"split_50_25_25"}>50/25/25</option>
+                    </select>      
 
                 </div>
 
