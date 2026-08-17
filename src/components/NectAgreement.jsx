@@ -1,6 +1,66 @@
 
 
 const NectAgreement = ({ data }) => {
+
+const paymentTable = (structure) => {
+    if (structure == "full") {
+        return(
+            [
+                {
+                    label: "Client has requested to pay in full.",
+                    price: data?.total_price || "Resubmit form for proper data",
+                    when: `Client will pay $${data.total_price} before start date`
+                }
+            ]
+        )  
+    } else if (structure == "split_50_50") {
+        return (
+            [
+                {
+                    label: "First payment (50%)",
+                    price: data?.total_price / 2 || "Resubmit form for proper data",
+                    when: "50% will be paid before projects start."
+                },
+                {
+                    label: "Final payment (50%)",
+                    price: data?.total_price / 2 || "Resubmit form for proper data",
+                    when: "50% will be paid before the end of the project."
+                }
+
+            ]
+        )  
+    } else if (structure == "split_50_25_25") {
+        return (
+            [
+                {
+                    label: "First payment (50%)",
+                    price: data?.total_price / 2 || "Resubmit form for proper data",
+                    when: "Client will pay 50% before the project starts"
+                },
+                {
+                    label: "Second payment (25%)",
+                    price: data?.total_price / 4 || "Resubmit form for proper data",
+                    when: "Client will pay 25% after first revision"
+                },
+                {
+                    label: "Final payment (25%)",
+                    price: data?.total_price / 4 || "Resubmit form for proper data",
+                    when: "Client will pay the remaining 25% before the project launch"
+                }
+            ]
+        )
+    }
+}
+
+const paymentResult = paymentTable(data.payment_structure)
+
+console.log(paymentTable(data.payment_structure))
+
+console.log(paymentTable(data.payment_structure)?.length)
+
+
+
+
     
   return (
     <div>
@@ -27,23 +87,91 @@ mario@mariovenneri.com</p>
 <h3>Project Total: ${data.total_price} </h3>
 <h3>Governing Law: State of New Jersey, United States of America </h3>
 
-
- 
-
-
-
-
+{/* contract numbered points */}
 
         {/* project overview */}
         <h1>1. Project Overview</h1>
         <p>{data.project_overview}</p>
 
         {/* what's included */}
-        2. What's Included 
-I'll design, build, and launch a website for you. This project includes: 
-– [List the features of their package here — pull directly from the pricing tier they chose] – Responsive design that works on phones, tablets, and computers 
-– Deployment to live hosting via Vercel 
-– Basic search engine setup so your site can be found and displayed properly
+        <h1>2. What's Included </h1>
+        <p>I'll design, build, and launch a website for you. This project includes: </p>
+        <ul>
+            <li>– Responsive design that works on phones, tablets, and computers </li>
+            <li>– Deployment to live hosting via Vercel </li>
+            <li>– Basic search engine setup so your site can be found and displayed properly</li>
+        </ul>
+        <p>A note on search engines: I set up the technical foundations so search engines can find and correctly display your  site. I do not guarantee search rankings, which no one can control. </p>
+
+        {/* whats not included */}
+        <h1>3. What's Not Included</h1>
+        <p>The following fall outside this agreement and would be quoted separately:</p>
+        <ul>
+            <li>– Logo design, brand identity, photography, or videography 
+</li>
+            <li>– Writing your bio or other written content 
+</li>
+            <li>– New pages or features beyond what's listed above </li>
+            <li>– SEO campaigns, paid advertising, or social media management 
+</li>
+            <li>– Ongoing content updates after launch (see Section 7)
+Anything requested beyond the scope above will be quoted separately and must be agreed in writing before work  begins. Conversations are great, but a verbal “can you just add…” doesn't change the scope 
+</li>
+            <li>— it has to be in writing so we both have the same understanding. 
+</li>
+        </ul>
+
+        {/* timeline */}\
+        <h1>4. Timeline</h1>
+        <p>Estimated turnaround: [X–X weeks] from your Project Start Date. 
+</p>
+        <p>Two things affect this timeline, and both are worth understanding up front: 
+</p>
+        <ul>
+            <li>– The clock starts on your start date, not the day you first reached out. I take on a limited number of projects at  a time so each one gets real attention. Your deposit reserves your place in the queue. 
+</li>
+            <li>– The clock pauses while I'm waiting on you. If I'm waiting on your bio, photos, music links, or feedback, that  time isn't counted against the turnaround. 
+</li>
+        </ul>
+        <p>I'd rather build it well than build it fast. If anything is going to run long, I'll tell you before it does — not after. 
+</p>
+
+            {/* payment */}
+            <h1>5. Payment</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Label:</th>
+                        <th>Price:</th>
+                        <th>When:</th>
+                    </tr>
+                </thead>
+                
+                
+                <tbody>
+                    {paymentResult?.map((row, index) => (
+                        <tr 
+                            className="py-6"
+                            key={index}
+                        >
+                                <td>{row.label}</td>
+                                <td>${row.price}</td>
+                                <td>{row.when}</td>
+                            
+                        </tr>
+                    ))}
+                
+                </tbody>
+            </table>
+            
+            
+
+
+            <p>For Custom and Bespoke projects, payment is structured 50% / 25% / 25% across agreed milestones. 
+</p>
+            <p>Invoices are sent through Wave and are due within 7 days. Work begins once the first payment is received. Your site stays on a private preview link until final payment clears, at which point it goes live and it's yours. 
+</p>
+
 
 
         {/* revisions */}
