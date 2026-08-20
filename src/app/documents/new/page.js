@@ -37,23 +37,27 @@ export default function NewDocumentPage() {
             package_id: packageId,
             payment_structure: paymentStructure
         })
-        setFirstName("")
-        setLastName("")
-        setEmail("")
-        setStreetAddress("")
-        setCity("")
-        setState("")
-        setZipCode("")
-        setEffectiveDate("")
-        setStartDate("")
-        setProjectOverview("")
-        setTotalPrice("")
-        setPackageId("")
-        setPaymentStructure("")
 
+        // if there is an error, log it and stop the run so info doesn't immediately clear
+        if (error) {
+            console.log("Error", error)
+            return    
+        } 
 
-        console.log(error)
-
+            setFirstName("")
+            setLastName("")
+            setEmail("")
+            setStreetAddress("")
+            setCity("")
+            setState("")
+            setZipCode("")
+            setEffectiveDate("")
+            setStartDate("")
+            setProjectOverview("")
+            setTotalPrice("")
+            setPackageId("")
+            setPaymentStructure("")
+    
     }
 
     useEffect(() => {
