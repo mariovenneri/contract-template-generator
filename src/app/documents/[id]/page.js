@@ -15,6 +15,8 @@ export default async function DynamicIDDocument({ params }) {
 
     return (
         <>
+            {/* 
+            
             <h1>Client Name: {data.client_name}</h1>
             <h1>Client Email: {data.client_email}</h1>
             <h1>Client Address: {data.client_address}</h1>
@@ -24,8 +26,16 @@ export default async function DynamicIDDocument({ params }) {
             <h1>Total price: ${data.total_price}</h1>
             <h1>{data.packages?.name}</h1>
             <h1>{data.payment_structure}</h1>
-
-            <h1 className="text-6xl pt-24">Contract:</h1>
+            
+            */}
+            <div className="flex justify-center items-center">
+                <a
+                    className="bg-blue-500 py-12 w-full font-bold text-4xl hover:cursor-pointer text-center tracking-tight"
+                    href={`/api/pdf?id=${id}`}
+                >
+                    Download PDF
+                </a>
+            </div>
             <NectAgreement data={data}/>
         </>
     )
