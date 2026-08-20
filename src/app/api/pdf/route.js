@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import { cookies } from "next/headers";
 
 export async function GET(req) {
     // launches headless browser instance
@@ -9,6 +10,18 @@ export async function GET(req) {
 
     //search params to get dynamic url for contracts using id of document
     const id = new URL(req.url).searchParams.get('id')
+
+    // read any/all cookies before goto
+
+    const cookieStore = await cookies()
+    const allCookies = cookieStore.getAll().map((c) => ({
+        name: c.name,
+        value: c.value,
+        domain: 'localhost',
+        path: '/'
+    }))
+
+    await page.setCookie(...allCookies)
 
     // navigate to target url (dynamically)
     const url = `http://localhost:3000/documents/${id}`

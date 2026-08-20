@@ -1,14 +1,15 @@
 import NectAgreement from "@/components/NectAgreement";
-import { supabase } from "@/lib/supabaseClient";
-
+import { createClient } from "@/lib/supabaseServer";
 
 export default async function DynamicIDDocument({ params }) {
     const { id } = await params;
+    const supabase = await createClient()
     const {data, error} = await supabase
         .from('documents')
         .select('*, packages(*)')
         .eq('id', id)
         .single()
+
 
     console.log(id);
 
