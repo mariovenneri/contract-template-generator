@@ -22,9 +22,9 @@ export default function NewDocumentPage() {
     const [packages, setPackages] = useState([])
     const [packageId, setPackageId] = useState('')
     const [paymentStructure, setPaymentStructure] = useState('')
+    const [revisionRounds, setRevisionRounds] = useState('');
+    const [timeline, setTimeline] = useState('')
 
-
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -39,14 +39,16 @@ export default function NewDocumentPage() {
         const { data, error } = await supabase.from('documents').insert({
             client_name: clientName,
             client_email: email,
-            client_address: clientAddress,
+            client_address: filteredAddress,
             effective_date: effectiveDate,
             start_date: startDate,
             project_overview: projectOverview,
             total_price: totalPrice,
             package_id: packageId,
             payment_structure: paymentStructure,
-            user_id: user.id
+            user_id: user.id,
+            timeline: timeline || null,
+            revision_rounds: revisionRounds || null
         })
         .select()
         .single()
@@ -70,11 +72,14 @@ export default function NewDocumentPage() {
             setTotalPrice("")
             setPackageId("")
             setPaymentStructure("")
+            setTimeline("")
+            setRevisionRounds("")
 
             router.push(`/documents/${data.id}`)
     
     }
 
+    // get packages useEffect
     useEffect(() => {
         const getPackages = async () => {
             const { data: packages, error } = await supabase.from('packages').select('*')
@@ -87,8 +92,22 @@ export default function NewDocumentPage() {
         getPackages()
     }, [])
 
+    // check users if logged in useEffect
+    useEffect(() => {
+        const checkUsers = async () => {
+            const { data: {  user } } = await supabase.auth.getUser()
+            if (!user) {
+                router.push('/login')
+            }
+        }
+        checkUsers()
+    }, [])
+
     const clientName = `${firstName} ${lastName}`
-    const clientAddress = `${streetAddress}, ${city}, ${state}, ${zipCode}`
+    
+    const filteredAddress = [streetAddress, city, state, zipCode].filter(item => Boolean(item)).join(', ')
+
+
 
 
     return (
@@ -234,8 +253,31 @@ export default function NewDocumentPage() {
                         <option value={"split_50_50"}>50/50</option>
                         <option value={"split_50_25_25"}>50/25/25</option>
                     </select>      
-
                 </div>
+
+
+                {/* timeline (primarily for bespoke projects) */}
+                <div className="pt-8">
+                    <label htmlFor="timeline">Timeline (if client needs custom timeline)</label>
+                        <input
+                            id="timeline"
+                            type="text"
+                            value={timeline}
+                            onChange={(e) => setTimeline(e.target.value)} 
+                        />
+                </div>
+
+                {/* revision rounds (primarily for bespoke projects) */}
+                <div className="pt-8">
+                    <label htmlFor="revision-rounds">Rounds of Revision (for bespoke projects)</label>
+                        <input
+                            id="revision-rounds"
+                            type="number"
+                            value={revisionRounds}
+                            onChange={(e) => setRevisionRounds(e.target.value)} 
+                        />
+                </div>
+
 
                 {/* submit button */}
                 <div className="flex items-center justify-center mt-15">
