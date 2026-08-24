@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
+import { useRouter } from "next/navigation"
 
 export default function NewDocumentPage() {
+
+    const router = useRouter()
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -19,13 +22,20 @@ export default function NewDocumentPage() {
     const [packages, setPackages] = useState([])
     const [packageId, setPackageId] = useState('')
     const [paymentStructure, setPaymentStructure] = useState('')
-    const [isSubmitted, setIsSubmitted] = useState(false)
 
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        // nested destructuring -> grabbing user_id from auth.user_id
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+            console.log('There is no user')
+            return
+        }
+
         const { data, error } = await supabase.from('documents').insert({
             client_name: clientName,
             client_email: email,
@@ -35,25 +45,34 @@ export default function NewDocumentPage() {
             project_overview: projectOverview,
             total_price: totalPrice,
             package_id: packageId,
-            payment_structure: paymentStructure
+            payment_structure: paymentStructure,
+            user_id: user.id
         })
-        setFirstName("")
-        setLastName("")
-        setEmail("")
-        setStreetAddress("")
-        setCity("")
-        setState("")
-        setZipCode("")
-        setEffectiveDate("")
-        setStartDate("")
-        setProjectOverview("")
-        setTotalPrice("")
-        setPackageId("")
-        setPaymentStructure("")
+        .select()
+        .single()
 
+        // if there is an error, log it and stop the run so info doesn't immediately clear
+        if (error) {
+            console.log("Error", error)
+            return    
+        } 
 
-        console.log(error)
+            setFirstName("")
+            setLastName("")
+            setEmail("")
+            setStreetAddress("")
+            setCity("")
+            setState("")
+            setZipCode("")
+            setEffectiveDate("")
+            setStartDate("")
+            setProjectOverview("")
+            setTotalPrice("")
+            setPackageId("")
+            setPaymentStructure("")
 
+            router.push(`/documents/${data.id}`)
+    
     }
 
     useEffect(() => {
