@@ -26,7 +26,7 @@ export default function Login() {
         setEmail("")
         setPassword("")
 
-        router.push('/documents/new')
+        router.push('/dashboard')
     }
 
     return (

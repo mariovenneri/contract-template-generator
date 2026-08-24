@@ -1,9 +1,17 @@
 import NectAgreement from "@/components/NectAgreement";
 import { createClient } from "@/lib/supabaseServer";
+import { redirect } from "next/navigation";
 
 export default async function DynamicIDDocument({ params }) {
     const { id } = await params;
     const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        redirect("/login")
+    }
+
     const {data, error} = await supabase
         .from('documents')
         .select('*, packages(*)')

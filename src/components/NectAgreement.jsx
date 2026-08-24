@@ -140,8 +140,8 @@ console.log(paymentTable(data.payment_structure)?.length)
                 <li>– Deployment to live hosting via Vercel </li>
                 <li>– Basic search engine setup so your site can be found and displayed properly</li>
                 <li>– Privacy policy page + custom 404 page</li>
-                <li>– {data.packages?.revision_rounds} round(s) of revisions </li>
-                <li>– {data.packages?.timeline_weeks} weeks turnaround </li>
+                <li>– {data.revision_rounds ?? data.packages?.revision_rounds} round(s) of revisions </li>
+                <li>– {data.timeline ?? data.packages?.timeline} turnaround</li>
                 <li>– {data.packages?.email_support_days} days post launch email support </li>
             </ul>
 
@@ -166,7 +166,7 @@ console.log(paymentTable(data.payment_structure)?.length)
 
         {/* 4. timeline */}
         <Header>4. Timeline</Header>
-        <p className="pb-3">Estimated turnaround: <span className="font-bold">{data.packages?.timeline_weeks} weeks </span> from your Project Start Date. 
+        <p className="pb-3">Estimated turnaround: <span className="font-bold">{data.timeline ?? data.packages?.timeline} </span> from your Project Start Date. 
 </p>
 
         {/* bullet points in timeline section */}
@@ -222,7 +222,7 @@ console.log(paymentTable(data.payment_structure)?.length)
 
         {/* 6.revisions */}
         <Header>6. Revisions</Header>
-        <p>This project includes <span className="font-bold">{data.packages?.revision_rounds} round(s) of revisions.</span></p>
+        <p>This project includes <span className="font-bold">{data.revision_rounds ?? data.packages?.revision_rounds} round(s) of revisions.</span></p>
 
         {/* revision explanation section */}
         <p className="py-3">Here's how it works. When your site is substantially complete, I'll send you a private preview link. You'll have 7 days to look it over and send me one consolidated list of everything you'd like changed — all of it together, in one message. I make those changes, and we launch. </p>
