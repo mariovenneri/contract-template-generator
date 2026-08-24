@@ -29,7 +29,7 @@ export default function NewDocumentPage() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        // nested destructuring
+        // nested destructuring -> grabbing user_id from auth.user_id
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
             console.log('There is no user')

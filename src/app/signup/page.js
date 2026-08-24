@@ -10,7 +10,7 @@ export default function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const {data, error} = await supabase.auth.signUp({ email, password})
+        const {data, error} = await supabase.auth.signUp({ email, password })
 
         if (error) {
             console.log("Error: ", error)

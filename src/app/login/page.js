@@ -13,7 +13,7 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const {data, error} = await supabase.auth.signInWithPassword({ email, password})
+        const {data, error} = await supabase.auth.signInWithPassword({ email, password })
 
         if (error) {
             console.log("Error: ", error)
