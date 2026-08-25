@@ -11,20 +11,27 @@ export async function GET(req) {
     //search params to get dynamic url for contracts using id of document
     const id = new URL(req.url).searchParams.get('id')
 
-    // read any/all cookies before goto
+    //get URL that app is being used on, no hardcoded localhost
+    const activeURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:3000`
 
+
+    // same process as URL but for cookies domain
+    const activeDomain = process.env.VERCEL_URL || 'localhost'
+
+    // read any/all cookies before goto
     const cookieStore = await cookies()
     const allCookies = cookieStore.getAll().map((c) => ({
         name: c.name,
         value: c.value,
-        domain: 'localhost',
+        domain: activeDomain,
         path: '/'
     }))
 
     await page.setCookie(...allCookies)
 
+    
     // navigate to target url (dynamically)
-    const url = `http://localhost:3000/documents/${id}`
+    const url = `${activeURL}/documents/${id}`
     await page.goto(url, { waitUntil: 'networkidle0' })
 
     //set pdf information
