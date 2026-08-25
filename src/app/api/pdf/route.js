@@ -1,9 +1,24 @@
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import Chromium from "@sparticuz/chromium";
 import { cookies } from "next/headers";
 
 export async function GET(req) {
-    // launches headless browser instance
-    const browser = await puppeteer.launch()
+    // launches headless browser instance (puppeteer-core does not come with fulll chromium so we need to build it for production)
+    const isProduction = !!process.env.VERCEL_URL
+
+    const browser = await puppeteer.launch(
+    isProduction
+        ? {
+            args: Chromium.args,
+            defaultViewport: Chromium.defaultViewport,
+            executablePath: await Chromium.executablePath(),
+            headless: true,
+        }
+        : {
+            executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+            headless: true,
+        }
+    )
 
     // opens a new tab/page
     const page = await browser.newPage()
