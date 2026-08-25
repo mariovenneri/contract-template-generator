@@ -24,6 +24,9 @@ export default function NewDocumentPage() {
     const [paymentStructure, setPaymentStructure] = useState('')
     const [revisionRounds, setRevisionRounds] = useState('');
     const [timeline, setTimeline] = useState('')
+    const [addOns, setAddOns] = useState([])
+    const [selectedAddOns, setSelectedAddOns] = useState([])
+    const [toggleAddOnCheckbox, setToggleAddOnCheckbox] = useState(false)
 
 
     const handleSubmit = async (e) => {
@@ -47,8 +50,10 @@ export default function NewDocumentPage() {
             package_id: packageId,
             payment_structure: paymentStructure,
             user_id: user.id,
-            timeline: timeline || null,
-            revision_rounds: revisionRounds || null
+            timeline: `${timeline} weeks` || null,
+            revision_rounds: revisionRounds || null, 
+            add_ons: selectedAddOns || null,
+            select_add_ons: toggleAddOnCheckbox
         })
         .select()
         .single()
@@ -74,6 +79,8 @@ export default function NewDocumentPage() {
             setPaymentStructure("")
             setTimeline("")
             setRevisionRounds("")
+            setSelectedAddOns([])
+            setToggleAddOnCheckbox(false)
 
             router.push(`/documents/${data.id}`)
     
@@ -92,6 +99,20 @@ export default function NewDocumentPage() {
         getPackages()
     }, [])
 
+
+    // get add-ons useEffect
+    useEffect(() => {
+        const getAddOns = async () => {
+            const { data: addOns, error } = await supabase.from('add_ons').select('*')
+            if (error) {
+                console.log(error)
+            } else {
+                setAddOns(addOns)
+            }
+        }
+        getAddOns()
+    }, [])
+
     // check users if logged in useEffect
     useEffect(() => {
         const checkUsers = async () => {
@@ -107,7 +128,13 @@ export default function NewDocumentPage() {
     
     const filteredAddress = [streetAddress, city, state, zipCode].filter(item => Boolean(item)).join(', ')
 
-
+    const handleAddOns = (e, item) => {
+        if (e.target.checked) {
+            setSelectedAddOns([...selectedAddOns, item])
+        } else {
+            setSelectedAddOns(selectedAddOns.filter((a) => a.id != item.id))
+        }
+    }
 
 
     return (
@@ -258,7 +285,7 @@ export default function NewDocumentPage() {
 
                 {/* timeline (primarily for bespoke projects) */}
                 <div className="pt-8">
-                    <label htmlFor="timeline">Timeline (if client needs custom timeline)</label>
+                    <label htmlFor="timeline">Timeline (if client needs custom timeline) in weeks (just type number)</label>
                         <input
                             id="timeline"
                             type="text"
@@ -276,6 +303,34 @@ export default function NewDocumentPage() {
                             value={revisionRounds}
                             onChange={(e) => setRevisionRounds(e.target.value)} 
                         />
+                </div>
+
+                {/* select add-ons for projects */}
+                <div className="pt-8">
+                    <h2>Choose your Add-ons:</h2>
+                    {addOns.map((item) => (
+                        <div key={item.id}>
+                            <label htmlFor={item.id}>{item.name} - ${item.price}</label>
+                            <input 
+                                type="checkbox"
+                                id={item.id}
+                                checked={selectedAddOns.some((a) => a.id === item.id)}
+                                onChange={(e) => handleAddOns(e, item)}
+                            />
+                        </div>
+                    ))}
+                </div>
+
+                {/* did user select preferred add-ons */}
+                <div className="pt-8">
+                    <h2>Did Client already select their preferred optional add-ons?</h2>
+                    <button
+                    value={toggleAddOnCheckbox}
+                        onClick={() => setToggleAddOnCheckbox(!toggleAddOnCheckbox)}
+                        className={`px-6 py-4 ${toggleAddOnCheckbox ? "bg-green-500" : "bg-red-500"} text-white font-bold rounded`}
+                    >
+                        {toggleAddOnCheckbox ? "Yes": "No"}
+                    </button>
                 </div>
 
 
