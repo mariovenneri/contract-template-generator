@@ -5,15 +5,19 @@ import { ArrowRight, FilePlus, FileStack, House, X } from 'lucide-react';
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-const Sidebar = ({ data }) => {
+type Document = { 
+    id: number,
+    client_name: string
+}
+
+const Sidebar = ({ data }: { data: Document[] }) => {
 
     const router = useRouter()
 
     const [isOpen, setIsOpen] = useState(false)
     const [viewAll, setViewAll] = useState(false)
 
-    const handleLogout =  async (e) => {
-        e.preventDefault()
+    const handleLogout =  async () => {
         const { error } = await supabase.auth.signOut()
 
         if (error) {

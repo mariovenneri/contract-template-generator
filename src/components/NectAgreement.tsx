@@ -1,8 +1,34 @@
 import Header from "@/ui/Header"
 
-const NectAgreement = ({ data }) => {
+type Document = {
+    client_name: string,
+    client_address: string,
+    client_email: string
+    total_price: number,
+    payment_structure: string | null,
+    project_overview: string
+    effective_date: string,
+    start_date: string,
+    timeline: string | null,
+    select_add_ons: boolean,
+    revision_rounds: number | null
+    packages: {
+        name: string,
+        included_features: string[],
+        revision_rounds: number,
+        email_support_days: number,
+        timeline: string
+    } | null,
+    add_ons: {
+        id: number,
+        name: string,
+        price: number
+    }[] | null
+}
 
-const paymentTable = (structure) => {
+const NectAgreement = ({ data }: { data: Document}) => {
+
+const paymentTable = (structure = data.payment_structure) => {
     if (structure == "full") {
         return(
             [
