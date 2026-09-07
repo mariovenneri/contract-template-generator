@@ -2,7 +2,7 @@ import puppeteer from "puppeteer-core";
 import Chromium from "@sparticuz/chromium";
 import { cookies } from "next/headers";
 
-export async function GET(req) {
+export async function GET(req: Request) {
     // launches headless browser instance (puppeteer-core does not come with fulll chromium so we need to build it for production)
     const isProduction = !!process.env.VERCEL_URL
 
@@ -10,7 +10,6 @@ export async function GET(req) {
     isProduction
         ? {
             args: Chromium.args,
-            defaultViewport: Chromium.defaultViewport,
             executablePath: await Chromium.executablePath(),
             headless: true,
         }
@@ -59,7 +58,7 @@ export async function GET(req) {
     // headers - metadata about response (request/response model)
     // 'Content-Type' - these are bytes for a pdf, shows reponse that content will be displayed as a pdf
     // 'Content-Disposition' - browser downloads the file instead of displaying it inline
-    return new Response(exportedPDF, {
+    return new Response(new Blob([new Uint8Array(exportedPDF)], { type: 'application/pdf' }), {
         headers: {
             'Content-Type': 'application/pdf',
             'Content-Disposition': 'attachment; filename="contract.pdf"'

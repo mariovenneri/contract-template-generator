@@ -15,6 +15,10 @@ export default async function Dashboard () {
         .from('documents')
         .select('*, packages(*)')
 
+    if (!data) {
+        console.log("There is no data here. Please check again.")
+        return null
+    }
 
     return (
         <div className="flex">
