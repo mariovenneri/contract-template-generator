@@ -8,7 +8,7 @@ export default function Signup() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         const {data, error} = await supabase.auth.signUp({ email, password })
 

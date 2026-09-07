@@ -2,7 +2,12 @@ import NectAgreement from "@/components/NectAgreement";
 import { createClient } from "@/lib/supabaseServer";
 import { redirect } from "next/navigation";
 
-export default async function DynamicIDDocument({ params }) {
+
+type Params = {
+    params: Promise<{ id: string }>
+}
+
+export default async function DynamicIDDocument({ params }: Params) {
     const { id } = await params;
     const supabase = await createClient()
 
@@ -17,9 +22,6 @@ export default async function DynamicIDDocument({ params }) {
         .select('*, packages(*)')
         .eq('id', id)
         .single()
-
-
-    console.log(id);
 
     if (!data) {
         return <p>Document not found</p>

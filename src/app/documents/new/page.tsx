@@ -4,6 +4,19 @@ import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { useRouter } from "next/navigation"
 
+
+type Package = {
+    id: number,
+    name: string,
+    price: number
+}
+
+type AddOn = {
+    id: number,
+    name: string,
+    price: number
+}
+
 export default function NewDocumentPage() {
 
     const router = useRouter()
@@ -19,17 +32,17 @@ export default function NewDocumentPage() {
     const [startDate, setStartDate] = useState('')
     const [projectOverview, setProjectOverview] = useState('')
     const [totalPrice, setTotalPrice] = useState('')
-    const [packages, setPackages] = useState([])
+    const [packages, setPackages] = useState<Package[]>([])
     const [packageId, setPackageId] = useState('')
     const [paymentStructure, setPaymentStructure] = useState('')
     const [revisionRounds, setRevisionRounds] = useState('');
     const [timeline, setTimeline] = useState('')
-    const [addOns, setAddOns] = useState([])
-    const [selectedAddOns, setSelectedAddOns] = useState([])
+    const [addOns, setAddOns] = useState<AddOn[]>([])
+    const [selectedAddOns, setSelectedAddOns] = useState<AddOn[]>([])
     const [toggleAddOnCheckbox, setToggleAddOnCheckbox] = useState(false)
 
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         // nested destructuring -> grabbing user_id from auth.user_id
@@ -50,7 +63,7 @@ export default function NewDocumentPage() {
             package_id: packageId,
             payment_structure: paymentStructure,
             user_id: user.id,
-            timeline: `${timeline} weeks` || null,
+            timeline: timeline || null,
             revision_rounds: revisionRounds || null, 
             add_ons: selectedAddOns || null,
             select_add_ons: toggleAddOnCheckbox
@@ -128,7 +141,7 @@ export default function NewDocumentPage() {
     
     const filteredAddress = [streetAddress, city, state, zipCode].filter(item => Boolean(item)).join(', ')
 
-    const handleAddOns = (e, item) => {
+    const handleAddOns = (e: React.ChangeEvent<HTMLInputElement>, item: AddOn) => {
         if (e.target.checked) {
             setSelectedAddOns([...selectedAddOns, item])
         } else {
@@ -285,7 +298,7 @@ export default function NewDocumentPage() {
 
                 {/* timeline (primarily for bespoke projects) */}
                 <div className="pt-8">
-                    <label htmlFor="timeline">Timeline (if client needs custom timeline) in weeks (just type number)</label>
+                    <label htmlFor="timeline">Timeline (if client needs custom timeline) in weeks (number - weeks)</label>
                         <input
                             id="timeline"
                             type="text"
@@ -310,10 +323,10 @@ export default function NewDocumentPage() {
                     <h2>Choose your Add-ons:</h2>
                     {addOns.map((item) => (
                         <div key={item.id}>
-                            <label htmlFor={item.id}>{item.name} - ${item.price}</label>
+                            <label htmlFor={String(item.id)}>{item.name} - ${item.price}</label>
                             <input 
                                 type="checkbox"
-                                id={item.id}
+                                id={String(item.id)}
                                 checked={selectedAddOns.some((a) => a.id === item.id)}
                                 onChange={(e) => handleAddOns(e, item)}
                             />
@@ -325,7 +338,7 @@ export default function NewDocumentPage() {
                 <div className="pt-8">
                     <h2>Did Client already select their preferred optional add-ons?</h2>
                     <button
-                    value={toggleAddOnCheckbox}
+                        type="button"
                         onClick={() => setToggleAddOnCheckbox(!toggleAddOnCheckbox)}
                         className={`px-6 py-4 ${toggleAddOnCheckbox ? "bg-green-500" : "bg-red-500"} text-white font-bold rounded`}
                     >
