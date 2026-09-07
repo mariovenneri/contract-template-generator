@@ -80,13 +80,6 @@ const paymentTable = (structure = data.payment_structure) => {
 
 const paymentResult = paymentTable(data.payment_structure)
 
-console.log(paymentTable(data.payment_structure))
-
-console.log(paymentTable(data.payment_structure)?.length)
-
-
-
-
     
   return (
     <div className="bg-[#f0f0f0] text-black pt-6 px-3">
@@ -197,11 +190,13 @@ console.log(paymentTable(data.payment_structure)?.length)
 
                         {/* checkbox container + radio buttons removed if user clicks yes to selected options */}
                         <span className={`pl-2 ${data.select_add_ons && "hidden"}`}>
-                        <input type="radio" name={`addon-${a.id}`} id={`addon-${a.id}-yes`} />
-                        <label htmlFor={`addon-${a.id}-yes`} className="pr-2 pl-1">Yes</label>
-
-                        <input type="radio" name={`addon-${a.id}`} id={`addon-${a.id}-no`} />
-                        <label htmlFor={`addon-${a.id}-no`} className="pl-1">No</label>
+                        {/* yes & no checkbox for pdf */}
+                            <div className="flex">
+                                <div className="pr-1">☐</div>
+                                <p className="font-bold">Yes</p>
+                                <div className="pl-3 pr-1">☐</div>
+                                <p className="font-bold">No</p>
+                            </div>
                         </span>
                     </li>
                     ))}
@@ -350,21 +345,13 @@ console.log(paymentTable(data.payment_structure)?.length)
             {/* checkbox container */}
             <div className="pl-2">
 
-                {/* yes checkbox */}
-                <input 
-                    type="radio"
-                    name="checkbox"
-                    id="yes"
-                />
-                <label htmlFor="yes" className="pr-2 pl-1">Yes</label>
-            
-                {/* no checkbox */}
-                <input 
-                    type="radio"
-                    name="checkbox"
-                    id="no"
-                />
-                <label htmlFor="no" className="pl-1">No</label>            
+                {/* yes & no checkbox for pdf */}
+                <div className="flex">
+                    <div className="pr-1">☐</div>
+                    <p className="font-bold">Yes</p>
+                    <div className="pl-3 pr-1">☐</div>
+                    <p className="font-bold">No</p>
+                </div>
             </div>
         </div>
 
