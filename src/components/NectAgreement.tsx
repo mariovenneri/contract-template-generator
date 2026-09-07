@@ -176,80 +176,53 @@ console.log(paymentTable(data.payment_structure)?.length)
 
 
         {/* 3. optional add-ons + whats not included */}
-            {data.add_ons ? (
+        {(() => {
+        const hasAddOns = data.add_ons != null && data.add_ons.length > 0
+        return (
+            <>
+            <Header>
+                3. {hasAddOns && `${data.select_add_ons ? "Selected" : "Optional"} Add-Ons & `}What's Not Included
+            </Header>
 
-                // if there ARE add-ons included / displayed
+            {hasAddOns && (
                 <>
-                    <Header>3. {data.select_add_ons ? "Selected" : "Optional"} Add-Ons & What's Not Included</Header>
+                <p className="pb-6">
+                    <span className="font-bold">{data.select_add_ons ? "Selected Add-Ons" : "Optional Add-Ons"}</span> — {data.select_add_ons ? "included below are the add-ons you selected, price is reflected in total (see Section 5)" : "available if you'd like them, added to your total only if you choose them:"}
+                </p>
 
-                    {/* optional add-on half */}
-                    <p className="pb-6"><span className="font-bold">{data.select_add_ons ? "Selected Add-Ons" : "Optional Add-Ons"}</span> — {data.select_add_ons ? "included below are the add-ons you selected, price is reflected in total (see Section 5)" : "available if you'd like them, added to your total only if you choose them:"}</p>
-                    {/* mapping over all selected add-ons from documents/new */}
-                     {data.add_ons?.map((a) => (
-                         <div
-                             key={a.id}
-                             className="flex gap-4"
-                         >
-                            <ul className="ml-12">
-                                <li>– {a.name}: ${a.price}</li>
-                            </ul>
-                            
-                        
-                            {/* checkbox container + radio buttons removed if user clicks yes to selected options */}
-                            <div className={`pl-2 ${data.select_add_ons && "hidden"}`}>
+                <ul className="ml-12">
+                    {data.add_ons?.map((a) => (
+                    <li key={a.id} className="flex gap-4">
+                        <span>– {a.name}: ${a.price}</span>
 
-                                {/* yes checkbox */}
-                                <input 
-                                    type="radio"
-                                    name="checkbox"
-                                    id="yes"
-                                />
-                                <label htmlFor="yes" className="pr-2 pl-1">Yes</label>
-                            
-                                {/* no checkbox */}
-                                <input 
-                                    type="radio"
-                                    name="checkbox"
-                                    id="no"
-                                />
-                                <label htmlFor="no" className="pl-1">No</label>            
-                            </div>
-                         </div>
-                     ))}
+                        {/* checkbox container + radio buttons removed if user clicks yes to selected options */}
+                        <span className={`pl-2 ${data.select_add_ons && "hidden"}`}>
+                        <input type="radio" name={`addon-${a.id}`} id={`addon-${a.id}-yes`} />
+                        <label htmlFor={`addon-${a.id}-yes`} className="pr-2 pl-1">Yes</label>
 
-                     {/* whats not included half */}
-                     <p className="py-6">The following fall outside this agreement and would be quoted separately:</p>
-
-                     {/* section of bullet points for what's not in project scpoe */}
-                    <ul className="mx-12 pb-6">
-                        <li>– Logo design, brand identity, photography, or videography </li>
-                        <li>– Writing your bio or other written content </li>
-                        <li>– New pages or features beyond what's listed above </li>
-                        <li>– SEO campaigns, paid advertising, or social media management </li>
-                        <li>– Ongoing content updates after launch (see Section 7). Anything requested beyond the scope above will be quoted separately and must be agreed in writing before work  begins. Conversations are great, but a verbal “can you just add…” doesn't change the scope </li>
-                        <li>— it has to be in writing so we both have the same understanding. </li>
-                    </ul>
-
-                </>
-            ) : (
-
-                // If there are NO add on 
-                <>
-                    <Header>3. What's Not Included</Header>
-                    <p className="pb-6">The following fall outside this agreement and would be quoted separately:</p>
-
-
-                    {/* section of bullet points for what's not in project scpoe */}
-                    <ul className="mx-12 pb-6">
-                        <li>– Logo design, brand identity, photography, or videography </li>
-                        <li>– Writing your bio or other written content </li>
-                        <li>– New pages or features beyond what's listed above </li>
-                        <li>– SEO campaigns, paid advertising, or social media management </li>
-                        <li>– Ongoing content updates after launch (see Section 7). Anything requested beyond the scope above will be quoted separately and must be agreed in writing before work  begins. Conversations are great, but a verbal “can you just add…” doesn't change the scope </li>
-                        <li>— it has to be in writing so we both have the same understanding. </li>
-                    </ul>
+                        <input type="radio" name={`addon-${a.id}`} id={`addon-${a.id}-no`} />
+                        <label htmlFor={`addon-${a.id}-no`} className="pl-1">No</label>
+                        </span>
+                    </li>
+                    ))}
+                </ul>
                 </>
             )}
+
+            {/* whats not included — rendered once, regardless of add-ons */}
+            <p className="py-6">The following fall outside this agreement and would be quoted separately:</p>
+
+            <ul className="mx-12 pb-6">
+                <li>– Logo design, brand identity, photography, or videography </li>
+                <li>– Writing your bio or other written content </li>
+                <li>– New pages or features beyond what's listed above </li>
+                <li>– SEO campaigns, paid advertising, or social media management </li>
+                <li>– Ongoing content updates after launch (see Section 7). Anything requested beyond the scope above will be quoted separately and must be agreed in writing before work begins. Conversations are great, but a verbal "can you just add…" doesn't change the scope </li>
+                <li>— it has to be in writing so we both have the same understanding. </li>
+            </ul>
+            </>
+        )
+        })()}
 
 
         {/* 4. timeline */}
