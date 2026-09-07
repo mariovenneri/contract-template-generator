@@ -290,7 +290,7 @@ export default function NewDocumentPage() {
 
                 {/* packages */}
                 <Label className="pt-6">Choose Your Package</Label>
-                <Select value={packageId} onValueChange={(value) => setPaymentStructure(value ?? "")}>
+                <Select value={packageId} onValueChange={(value) => setPackageId(value ?? "")}>
                 <SelectTrigger>
                     <SelectValue placeholder="Choose a package" />
                 </SelectTrigger>
