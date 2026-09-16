@@ -165,7 +165,7 @@ export default function NewDocumentPage() {
                 <div className="flex justify-between">
                     <h1 className="text-4xl tracking-tighter">Start with your information</h1>
                     <Button
-                        onClick={() => router.back()}
+                        onClick={() => router.push("/dashboard")}
                         className="hover:cursor-pointer"
                     >
                         <MoveLeft/> Back
