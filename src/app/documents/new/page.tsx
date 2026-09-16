@@ -165,7 +165,7 @@ export default function NewDocumentPage() {
                 <div className="flex justify-between">
                     <h1 className="text-4xl tracking-tighter">Start with your information</h1>
                     <Button
-                        onClick={() => router.back()}
+                        onClick={() => router.push("/dashboard")}
                         className="hover:cursor-pointer"
                     >
                         <MoveLeft/> Back
@@ -290,7 +290,7 @@ export default function NewDocumentPage() {
 
                 {/* packages */}
                 <Label className="pt-6">Choose Your Package</Label>
-                <Select value={packageId} onValueChange={(value) => setPaymentStructure(value ?? "")}>
+                <Select value={packageId} onValueChange={(value) => setPackageId(value ?? "")}>
                 <SelectTrigger>
                     <SelectValue placeholder="Choose a package" />
                 </SelectTrigger>
